@@ -9,7 +9,7 @@ class RetrofitConfig {
 
     companion object {
         fun getApiService(): ApiService {
-            val BASE_URL = "http://34.29.160.67:3000/"
+            val BASE_URL = "https://hackjakarta.timbangkit.cloud/"
             val loggingInterceptor =
                 HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             val client = OkHttpClient.Builder()

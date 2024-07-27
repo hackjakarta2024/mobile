@@ -4,12 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class FoodRecommendationResponse(
 
-	@field:SerializedName("promo")
-	val promo: String,
+	@field:SerializedName("message")
+	val message: String,
 
-	@field:SerializedName("user_id")
-	val userId: String,
-
-	@field:SerializedName("food")
-	val food: ArrayList<FoodListItem>
+	@field:SerializedName("data")
+	val data: FoodRecommendation
 )
