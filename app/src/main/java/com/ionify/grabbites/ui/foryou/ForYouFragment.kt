@@ -1,19 +1,21 @@
 package com.ionify.grabbites.ui.foryou
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ionify.grabbites.R
 import com.ionify.grabbites.adapter.RecommendationAdapter
 import com.ionify.grabbites.data.model.FoodListItem
 import com.ionify.grabbites.data.model.FoodRecommendation
 import com.ionify.grabbites.data.model.Promo
 import com.ionify.grabbites.data.model.UserReview
 import com.ionify.grabbites.databinding.FragmentForYouBinding
+import com.ionify.grabbites.utils.Result
 import com.ionify.grabbites.utils.ViewModelFactory
 
 class ForYouFragment : Fragment() {
@@ -22,7 +24,7 @@ class ForYouFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var factory: ViewModelFactory
-    private val profileViewModel: ForYouViewModel by viewModels { factory }
+    private val forYouViewModel: ForYouViewModel by viewModels { factory }
 
     private lateinit var recommendationAdapter: RecommendationAdapter
     override fun onCreateView(
@@ -41,8 +43,23 @@ class ForYouFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireActivity())
             adapter = recommendationAdapter
         }
-        val response = generateFoodRecommendationResponse()
-        recommendationAdapter.setListFood(response.food, promo = response.promo.name)
+        forYouViewModel.fypData.observe(viewLifecycleOwner, Observer { result ->
+            when (result) {
+                is Result.Loading -> {
+                    showLoading(true)
+                }
+                is Result.Success -> {
+                    showLoading(false)
+                    val foods = result.data.food
+                    val promo = result.data.promo.name
+                    recommendationAdapter.setListFood(foods, promo)
+                }
+                is Result.Error -> {
+                    showLoading(false)
+                    Toast.makeText(requireActivity(), "Gagal mendapatkan data rekomendasi makanan.", Toast.LENGTH_LONG).show()
+                }
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -78,4 +95,23 @@ class ForYouFragment : Fragment() {
         )
     }
 
+    fun updateSearchQuery(query: String) {
+        Toast.makeText(requireActivity(), query, Toast.LENGTH_SHORT).show()
+        val response = generateFoodRecommendationResponse()
+        recommendationAdapter.setListFood(response.food, promo = response.promo.name)
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.apply {
+                progressBar.visibility = View.VISIBLE
+                rvRecommendation.visibility = View.GONE
+            }
+        } else {
+            binding.apply {
+                progressBar.visibility = View.GONE
+                rvRecommendation.visibility = View.VISIBLE
+            }
+        }
+    }
 }

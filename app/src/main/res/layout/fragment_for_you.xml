@@ -6,12 +6,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.foryou.ForYouFragment">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyle"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecommendation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="8dp"
+        android:layout_marginTop="8dp"
         tools:listitem="@layout/item_food_card"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

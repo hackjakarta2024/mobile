@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import com.ionify.grabbites.data.local.AuthPreference
 import com.ionify.grabbites.data.model.ErrorResponse
+import com.ionify.grabbites.data.model.FoodRecommendation
 import com.ionify.grabbites.data.model.LoginBody
 import com.ionify.grabbites.data.remote.ApiService
 import com.ionify.grabbites.utils.Result
@@ -49,6 +50,35 @@ class Repository(
                 else -> {
                     Log.e("Login error", "Another error")
                     emit(Result.Error(e.message.toString()))
+                }
+            }
+        }
+    }
+
+    fun getFyp(): LiveData<Result<FoodRecommendation>> = liveData {
+        emit(Result.Loading)
+
+        getToken().collect { token ->
+            try {
+                val response = apiService.getFyp("Bearer ${token}")
+                val data = response.data
+
+                Log.d("Success", "Get food fyp")
+
+                emit(Result.Success(data))
+            } catch (e: Exception) {
+                Log.e("Fetch fyp error", "Erroorrr")
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = Gson().fromJson(e.response()?.errorBody()?.string(), ErrorResponse::class.java)
+                        val msg = jsonRes.message
+                        Log.e("Login error", "HTTPException ${msg}")
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        Log.e("Login error", "Another error")
+                        emit(Result.Error(e.message.toString()))
+                    }
                 }
             }
         }

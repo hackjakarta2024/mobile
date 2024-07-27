@@ -2,8 +2,10 @@ package com.ionify.grabbites.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.ionify.grabbites.R
 import com.ionify.grabbites.adapter.RecommendationAdapter
 import com.ionify.grabbites.data.model.FoodListItem
@@ -35,11 +37,34 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
+            binding.searchView.requestFocus()
+        }
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    search(it)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+
         binding.buttonLogout.setOnClickListener {
             mainViewModel.logout()
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun search(query: String) {
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer) as? ForYouFragment
+        fragment?.updateSearchQuery(query)
     }
 }

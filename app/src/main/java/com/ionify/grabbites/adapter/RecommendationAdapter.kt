@@ -60,9 +60,9 @@ class RecommendationAdapter :
                 tvRestaurantTitle.text = food.restaurantName
                 tvCopywriting.text = food.desc
 
-                val reviewAdapter = ReviewAdapter(food.userReview)
-                vpReview.adapter = reviewAdapter
-                dotsIndicator.attachTo(vpReview)
+//                val reviewAdapter = ReviewAdapter(food.userReview)
+//                vpReview.adapter = reviewAdapter
+//                dotsIndicator.attachTo(vpReview)
             }
         }
     }

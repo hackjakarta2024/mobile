@@ -16,7 +16,7 @@ interface ApiService {
     ): LoginResponse
 
     // Get FYP
-    @GET("api/v1/food/fyp")
+    @GET("api/v1/fyp/food")
     suspend fun getFyp(
         @Header("Authorization") token: String
     ): FoodRecommendationResponse
