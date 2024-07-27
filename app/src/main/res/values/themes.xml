@@ -26,6 +26,11 @@
         <item name="android:layout_marginVertical" type="dimen">8dp</item>
     </style>
 
+    // rounded image
+    <style name="RoundedSquare">
+        <item name="cornerSize">8dp</item>
+    </style>
+
     <style name="Theme.GrabBites" parent="Base.Theme.GrabBites" />
 
 </resources>

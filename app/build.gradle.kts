@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.devToolsKsp)
 }
 
 android {
@@ -62,6 +63,8 @@ dependencies {
 
     // glide
     implementation(libs.glide)
+    ksp("com.github.bumptech.glide:ksp:4.16.0")
+
 
     // network-retrofit
     implementation(libs.squareup.retrofit2.retrofit)
@@ -73,4 +76,11 @@ dependencies {
 
     // data store
     implementation(libs.androidx.datastore.datastore.preferences)
+
+    // tbuonomo dots indicator
+    implementation(libs.tbuonomo.dotsindicator)
+}
+
+ksp {
+    arg("glide.module", "com.ionify.grabbites") // Sesuaikan dengan nama package dan class GlideModule lo
 }
