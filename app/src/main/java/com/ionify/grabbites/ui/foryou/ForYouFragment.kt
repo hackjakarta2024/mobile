@@ -33,16 +33,18 @@ class ForYouFragment : Fragment() {
     ): View {
         factory = ViewModelFactory.getInstance(requireActivity())
         _binding = FragmentForYouBinding.inflate(inflater, container, false)
+        recommendationAdapter = RecommendationAdapter()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recommendationAdapter = RecommendationAdapter()
+
         binding.rvRecommendation.apply {
             layoutManager = LinearLayoutManager(requireActivity())
             adapter = recommendationAdapter
         }
+
         forYouViewModel.fypData.observe(viewLifecycleOwner, Observer { result ->
             when (result) {
                 is Result.Loading -> {
@@ -96,9 +98,27 @@ class ForYouFragment : Fragment() {
     }
 
     fun updateSearchQuery(query: String) {
-        Toast.makeText(requireActivity(), query, Toast.LENGTH_SHORT).show()
-        val response = generateFoodRecommendationResponse()
-        recommendationAdapter.setListFood(response.food, promo = response.promo.name)
+        forYouViewModel.searchFoodData(query).observe(viewLifecycleOwner, Observer { result ->
+            if (result != null) {
+                when(result) {
+                    is Result.Loading -> {
+                        showLoading(true)
+                    }
+                    is Result.Success -> {
+                        showLoading(false)
+                        val foods = result.data.food
+                        recommendationAdapter.setListFood(foods, promo = "")
+                    }
+                    is Result.Error -> {
+                        showLoading(false)
+                        Toast.makeText(requireActivity(), "Gagal mendapatkan data makanan yang anda inginkan.", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+        })
+//        val response = generateFoodRecommendationResponse()
+//        recommendationAdapter.setListFood(response.food, promo = "")
     }
 
     private fun showLoading(isLoading: Boolean) {

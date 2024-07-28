@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,7 +34,6 @@ class RecommendationAdapter :
                 val spanFakePrice = SpannableString(fakePriceText)
                 val strikeThroughSpan = StrikethroughSpan()
 
-// Apply the strikethrough span to the entire text
                 spanFakePrice.setSpan(
                     strikeThroughSpan,
                     0,
@@ -43,7 +43,11 @@ class RecommendationAdapter :
 
                 tvFakePrice.text = spanFakePrice
                 tvRealPrice.text = "Rp${food.realPrice}"
-                tvDiscount.text = promo
+                if(promo.isNotEmpty()) {
+                    tvDiscount.text = promo
+                } else {
+                    tvDiscount.visibility = View.GONE
+                }
                 tvFoodTitle.text = food.name
 
                 val ratingText = "${food.ratingTotal}/5"
@@ -60,9 +64,14 @@ class RecommendationAdapter :
                 tvRestaurantTitle.text = food.restaurantName
                 tvCopywriting.text = food.desc
 
-//                val reviewAdapter = ReviewAdapter(food.userReview)
-//                vpReview.adapter = reviewAdapter
-//                dotsIndicator.attachTo(vpReview)
+                if (food.userReview != null) {
+                    vpReview.visibility = View.VISIBLE
+                    dotsIndicator.visibility = View.VISIBLE
+
+                    val reviewAdapter = ReviewAdapter(food.userReview)
+                    vpReview.adapter = reviewAdapter
+                    dotsIndicator.attachTo(vpReview)
+                }
             }
         }
     }

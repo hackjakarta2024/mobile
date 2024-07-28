@@ -8,4 +8,6 @@ import com.ionify.grabbites.utils.Result
 
 class ForYouViewModel(private val repository: Repository): ViewModel() {
     val fypData: LiveData<Result<FoodRecommendation>> = repository.getFyp()
+
+    fun searchFoodData(query: String): LiveData<Result<FoodRecommendation>> = repository.getSearchFood(query)
 }

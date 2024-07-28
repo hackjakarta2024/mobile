@@ -72,11 +72,40 @@ class Repository(
                     is HttpException -> {
                         val jsonRes = Gson().fromJson(e.response()?.errorBody()?.string(), ErrorResponse::class.java)
                         val msg = jsonRes.message
-                        Log.e("Login error", "HTTPException ${msg}")
+                        Log.e("Search food error", "HTTPException ${msg}")
                         emit(Result.Error(msg))
                     }
                     else -> {
-                        Log.e("Login error", "Another error")
+                        Log.e("Search food error", "Another error")
+                        emit(Result.Error(e.message.toString()))
+                    }
+                }
+            }
+        }
+    }
+
+    fun getSearchFood(query: String): LiveData<Result<FoodRecommendation>> = liveData {
+        emit(Result.Loading)
+
+        getToken().collect { token ->
+            try {
+                val response = apiService.getSearchFood("Bearer ${token}", query)
+                val data = response.data
+
+                Log.d("Success", "Get search food")
+
+                emit(Result.Success(data))
+            } catch (e: Exception) {
+                Log.e("Fetch search food error", "Erroorrr")
+                when (e) {
+                    is HttpException -> {
+                        val jsonRes = Gson().fromJson(e.response()?.errorBody()?.string(), ErrorResponse::class.java)
+                        val msg = jsonRes.message
+                        Log.e("Search food error", "HTTPException ${msg}")
+                        emit(Result.Error(msg))
+                    }
+                    else -> {
+                        Log.e("Search food error", "Another error")
                         emit(Result.Error(e.message.toString()))
                     }
                 }
