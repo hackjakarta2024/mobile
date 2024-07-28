@@ -30,15 +30,6 @@ class LoginActivity : AppCompatActivity() {
         factory = ViewModelFactory.getInstance(this)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        lifecycleScope.launch {
-            loginViewModel.token.collect { token ->
-                if (token.isNotEmpty()) {
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-            }
-        }
         setupUi()
         setupAction()
     }

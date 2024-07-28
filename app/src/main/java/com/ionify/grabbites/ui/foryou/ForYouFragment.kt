@@ -69,34 +69,6 @@ class ForYouFragment : Fragment() {
         _binding = null
     }
 
-    private fun generateFoodRecommendationResponse(): FoodRecommendation {
-        val userReviews = arrayListOf(
-            UserReview(name = "User A", review = "Enak banget!", rating = 5),
-            UserReview(name = "User B", review = "Biasa aja", rating = 3),
-            UserReview(name = "User C", review = "Kurang enak", rating = 2)
-        )
-
-        val foodItems = (1..10).map { index ->
-            FoodListItem(
-                ratingTotal = (1..5).random(),
-                image = "https://i0.wp.com/resepkoki.id/wp-content/uploads/2016/09/Resep-Nasi-Goreng-Ikan-Teri.jpg?fit=1920%2C1440&ssl=1",
-                name = "Food $index",
-                id = "food$index",
-                realPrice = (50000..100000).random(),
-                restaurantName = "Restaurant $index",
-                desc = "Deskripsi makanan $index",
-                fakePrice = (100000..150000).random(),
-                userReview = userReviews as ArrayList<UserReview>
-            )
-        }
-
-        return FoodRecommendation(
-            promo = Promo(promoId = "satu", name = "Diskon 125% sampe 2rb"),
-            userId = "user123",
-            food = foodItems as ArrayList<FoodListItem>
-        )
-    }
-
     fun updateSearchQuery(query: String) {
         forYouViewModel.searchFoodData(query).observe(viewLifecycleOwner, Observer { result ->
             if (result != null) {
@@ -117,8 +89,6 @@ class ForYouFragment : Fragment() {
             }
 
         })
-//        val response = generateFoodRecommendationResponse()
-//        recommendationAdapter.setListFood(response.food, promo = "")
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -11,7 +11,5 @@ class LoginViewModel(private val repository: Repository): ViewModel() {
         value = "Selamat datang di <b>GrabBites</b>, silahkan login untuk memulai perjalanan bersama kami"
     }
     val loginDescText: LiveData<String> = _loginDescText
-
-    val token: Flow<String> = repository.getToken()
     fun postLogin(email: String, password: String) = repository.postLogin(email, password)
 }

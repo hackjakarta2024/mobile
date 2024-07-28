@@ -30,18 +30,23 @@ class RecommendationAdapter :
                 Glide.with(itemView.context)
                     .load(food.image)
                     .into(ivFood)
-                val fakePriceText = "Rp${food.fakePrice}"
-                val spanFakePrice = SpannableString(fakePriceText)
-                val strikeThroughSpan = StrikethroughSpan()
+                if (food.fakePrice == 0) {
+                    tvFakePrice.visibility = View.GONE
+                } else {
+                    val fakePriceText = "Rp${food.fakePrice}"
+                    val spanFakePrice = SpannableString(fakePriceText)
+                    val strikeThroughSpan = StrikethroughSpan()
 
-                spanFakePrice.setSpan(
-                    strikeThroughSpan,
-                    0,
-                    spanFakePrice.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
+                    spanFakePrice.setSpan(
+                        strikeThroughSpan,
+                        0,
+                        spanFakePrice.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
 
-                tvFakePrice.text = spanFakePrice
+                    tvFakePrice.text = spanFakePrice
+                }
+
                 tvRealPrice.text = "Rp${food.realPrice}"
                 if(promo.isNotEmpty()) {
                     tvDiscount.text = promo
@@ -62,16 +67,19 @@ class RecommendationAdapter :
                 tvRating.text = spanRating
 
                 tvRestaurantTitle.text = food.restaurantName
-                tvCopywriting.text = food.desc
-
-                if (food.userReview != null) {
-                    vpReview.visibility = View.VISIBLE
-                    dotsIndicator.visibility = View.VISIBLE
-
-                    val reviewAdapter = ReviewAdapter(food.userReview)
-                    vpReview.adapter = reviewAdapter
-                    dotsIndicator.attachTo(vpReview)
+                if (food.desc == "") {
+                    tvCopywriting.visibility = View.GONE
+                } else {
+                    tvCopywriting.visibility = View.VISIBLE
+                    tvCopywriting.text = food.desc
                 }
+
+                vpReview.visibility = View.VISIBLE
+                dotsIndicator.visibility = View.VISIBLE
+
+                val reviewAdapter = ReviewAdapter(food.userReview)
+                vpReview.adapter = reviewAdapter
+                dotsIndicator.attachTo(vpReview)
             }
         }
     }
